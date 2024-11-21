@@ -3,6 +3,11 @@ import numpy as np
 import torch
 import sys
 import gc
+import CMEmbeddingCurrentGenerator from "./CMEmbeddingCurrentGenerator.py"
+import RIMEmbeddingCurrentGenerator from "./RIMEmbeddingCurrentGenerator.py"
+import CMEmbeddingHistoryGenerator from "./CMEmbeddingHistoryGenerator.py"
+import RIMEmbeddingHistoryGenerator from "./RIMEmbeddingHistoryGenerator.py"
+import MultiviewNetwork from "./MultiviewNetwork.py"
 
 class VelocityRecommender:
     def __init__(self):
