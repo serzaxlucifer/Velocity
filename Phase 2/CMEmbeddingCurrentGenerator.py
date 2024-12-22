@@ -4,6 +4,11 @@ import pandas as pd
 import sys
 import gc
 
+# # # # # # # # # # # # # # # # # # # # # # # #
+# Module: CM EMBEDDING CURRENT VIEW GENERATOR #
+# Authors: Mukul Malik, Mukul Verma           #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
 class CMEmbeddingCurrentGenerator:
     def __init__(self, embedding_dim=10, learning_rate=0.01, epochs=100):
         """
