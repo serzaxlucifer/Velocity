@@ -1,6 +1,7 @@
 # Velocity Movie Recommender Library
 
 This repository contains code of our implementation of different recommendation strategies, and papers. 
+
 Phase 1 contains implementation of Matrix Factorization and Paper: Personalized Recommendation System Based on Collaborative Filtering for IoT Scenarios [DOI:10.1109/TSC.2020.2964552]
 Phase 2 contains implementation of paper: A Novel Deep Learning-Based Collaborative Filtering Model for Recommendation System [DOI:10.1109/TCYB.2018.2795041]
 More coming soon!
