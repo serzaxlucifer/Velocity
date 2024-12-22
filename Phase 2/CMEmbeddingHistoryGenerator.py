@@ -1,5 +1,10 @@
 import torch
 
+# # # # # # # # # # # # # # # # # # # # # # # #
+# Module: CM EMBEDDING HISTORY VIEW GENERATOR #
+# Authors: Mukul Malik, Mukul Verma           #
+# # # # # # # # # # # # # # # # # # # # # # # #
+
 class CMEmbeddingHistoryGenerator:
     def __init__(self):
         """

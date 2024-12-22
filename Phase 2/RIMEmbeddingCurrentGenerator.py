@@ -4,6 +4,11 @@ import pandas as pd
 import sys
 import gc
 
+# # # # # # # # # # # # # # # # # # # # # # # # #
+# Module: RIM EMBEDDING CURRENT VIEW GENERATOR  #
+# Authors: Mukul Malik, Mukul Verma             #
+# # # # # # # # # # # # # # # # # # # # # # # # #
+
 class RIMEmbeddingCurrentGenerator:
     
     def __init__(self, embedding_dim=3, learning_rate=0.01, epochs=100):

@@ -1,5 +1,10 @@
 import torch
 
+# # # # # # # # # # # # # # # # # # # # # # # # #
+# Module: RIM EMBEDDING HISTORY VIEW GENERATOR  #
+# Authors: Mukul Malik, Mukul Verma             #
+# # # # # # # # # # # # # # # # # # # # # # # # #
+
 class RIMEmbeddingHistoryGenerator:
     def __init__(self, ratings_matrix, item_embeddings, user_embeddings, rating_levels=5):
         """

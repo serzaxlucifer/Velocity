@@ -125,7 +125,7 @@ class CMEmbeddingCurrentGenerator:
         n = CM_tensor.shape[0]
         optimizer = torch.optim.Adagrad([P_tensor, Q_tensor, bias_tensor], lr=lr)
         
-        # Is this the right place for the log.
+        # Is this the right place for the log? Mukul Verma (Need to try without log!)
         CM_tensor = torch.log(torch.clamp(CM_tensor, min=1e-10))
 
         for epoch in range(epochs):
@@ -134,7 +134,7 @@ class CMEmbeddingCurrentGenerator:
               # Calculate error
               error = CM_tensor - pred_ratings
               # Compute loss with regularization
-              loss = torch.sum(torch.square(error * (CM_tensor > 0))) #+ self.beta/2 * (torch.sum(torch.square(P_tensor)) + torch.sum(torch.square(Q_tensor)))
+              loss = torch.sum(torch.square(error * (CM_tensor > 0))) #+ self.beta/2 * (torch.sum(torch.square(P_tensor)) + torch.sum(torch.square(Q_tensor)))  NOTE: Regularization is not used in the current implementation
 
               optimizer.zero_grad()
               loss.backward()

@@ -4,6 +4,11 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 
+# # # # # # # # # # # # # # # # # # # # # # # # #
+# Module: MULTI-VIEW NEURAL NETWORK (MVNN)      #
+# Authors: Mukul Malik, Mukul Verma             #
+# # # # # # # # # # # # # # # # # # # # # # # # #
+
 class MultiviewNetwork(nn.Module):
     def __init__(self, embedding_dim, FCNeurons_current, CONVNeurons_current, FCNeurons_history, CONVNeurons_history, num_final_hidden, num_ratings, lr, eps, device=None):
         super(MultiviewNetwork, self).__init__()  
@@ -127,4 +132,4 @@ class MultiviewNetwork(nn.Module):
         inputs = inputs.to(self.device)  # Ensure inputs are on the correct device
         with torch.no_grad():
             outputs = self(inputs)  # Perform forward pass
-        return outputs.cpu()  # Return results on CPU for easier handling
+        return outputs.cpu()  # Return results on CPU for easier handling (IMPORTANT! We spent quite some time here :))

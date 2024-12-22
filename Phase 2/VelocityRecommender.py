@@ -3,11 +3,21 @@ import numpy as np
 import torch
 import sys
 import gc
-import CMEmbeddingCurrentGenerator from "./CMEmbeddingCurrentGenerator.py"
-import RIMEmbeddingCurrentGenerator from "./RIMEmbeddingCurrentGenerator.py"
-import CMEmbeddingHistoryGenerator from "./CMEmbeddingHistoryGenerator.py"
-import RIMEmbeddingHistoryGenerator from "./RIMEmbeddingHistoryGenerator.py"
-import MultiviewNetwork from "./MultiviewNetwork.py"
+from CMEmbeddingCurrentGenerator import CMEmbeddingCurrentGenerator
+from RIMEmbeddingCurrentGenerator import RIMEmbeddingCurrentGenerator
+from CMEmbeddingHistoryGenerator import CMEmbeddingHistoryGenerator
+from RIMEmbeddingHistoryGenerator import RIMEmbeddingHistoryGenerator
+from MultiviewNetwork import MultiviewNetwork
+
+# # # # # # # # # # # # # # # # # # # # # # # # #
+# Module:  VELOCITY RECOMMENDER                 #
+# Authors: Mukul Malik, Mukul Verma             #
+# # # # # # # # # # # # # # # # # # # # # # # # #
+
+# NOTE TO VIEWER: Some matrices are big in size (for example, when we prepare training input for the neural network) 
+# and can consume a lot of memory. We have thus included a function called RAMStats() which can be called anytime to
+# monitor how much total RAM current variables are consuming to identify bottlenecks. It surely helped us a lot during
+# our work. This code can be optimized space-wise so your suggestions on the same would be highly appreciated!
 
 class VelocityRecommender:
     def __init__(self):
