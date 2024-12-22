@@ -31,7 +31,6 @@ class Pearson:
 
         num_users = data_matrix.shape[0]
         self.user_sim_matrix = torch.zeros(num_users)
-        print("SIGMA: =", self.sigma)
 
         # UPDATED CODE FOR PEARSON: Map user_index's items to TCC(i) (used globally)
 
@@ -73,6 +72,56 @@ class Pearson:
 
         similarity_numpy = self.user_sim_matrix.numpy()  # Convert PyTorch tensor to NumPy array
 
+        return self.user_sim_matrix
+
+    def run_test(self, data_matrix, time_matrix, timestamp_matrix, user_index, movie_index, time_matrix_test):
+        # VERMA, SUJAL: You'll find the code in BTP.ipynb (but its for numpy input, convert into torch and fill this.)
+        num_users = data_matrix.shape[0]
+        self.user_sim_matrix = torch.zeros(num_users)
+
+        # UPDATED CODE FOR PEARSON: Map user_index's items to TCC(i) (used globally)
+
+        time_stamps = time_matrix[user_index]
+        max_timestamp = 0
+        if time_matrix_test[user_index][movie_index] != 0:
+            max_timestamp = time_matrix_test[user_index][movie_index]
+        else:
+            max_timestamp = timestamp_matrix[user_index]
+
+        self.time_correlation_coefficients = self.time_correlation_coefficient(self.get_month_difference(time_stamps, max_timestamp), self.sigma).to('cuda:0')
+
+        for i in range(num_users):
+            if i != user_index:  # Exclude the user itself
+
+                # Find indices where both users have non-zero ratings
+                non_zero_indices = numpy.nonzero((data_matrix[user_index] != 0) & (data_matrix[i] != 0))
+
+                if len(non_zero_indices) < 0:
+                    self.user_sim_matrix[i] = 0
+                    continue
+
+                # Filter ratings and timestamps to keep only non-zero elements
+                ratings_user = data_matrix[user_index].clone()
+                ratings_other_user = data_matrix[i].clone()
+
+                # Adjust ratings with time correlation coefficients
+                ratings_user = ratings_user.to('cuda:0')
+                ratings_other_user = ratings_other_user.to('cuda:0')
+
+                ratings_user = ratings_user * self.time_correlation_coefficients
+                ratings_other_user = ratings_other_user * self.time_correlation_coefficients
+
+                adjusted_ratings_user = ratings_user[non_zero_indices]
+                adjusted_ratings_other_user = ratings_other_user[non_zero_indices]
+
+
+                # Compute pearson similarity
+                self.user_sim_matrix[i] = self.pearson_correlation(adjusted_ratings_user, adjusted_ratings_other_user)
+
+        similarity_numpy = self.user_sim_matrix.numpy()  # Convert PyTorch tensor to NumPy array
+
+        # Set NumPy to display three decimal places
+        numpy.set_printoptions(formatter={'float': lambda x: "{:.3f}".format(x)})
         return self.user_sim_matrix
 
     def pearson_correlation(self, x, y):

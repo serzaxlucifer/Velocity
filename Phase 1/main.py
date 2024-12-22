@@ -3,10 +3,12 @@ import pandas as pd
 import sys
 from datetime import datetime
 from VelocityRecommender import VelocityRecommender
-from TCCF import TCCF, WithoutTCCF
-from MatrixFactorization import MatrixFactorization
+from TCCF import *
+from MF import MatrixFactorization
 from TestDriver import TestDriver
 from SimilarityMetrics import Pearson, Cosine
+from CollaborativeFiltering import CollaborativeFiltering
+from CSKMeans import CSKMeans
 
 # The primary goal while writing this code has been to make it easily extensible and maintainable. The code is 
 # well-structured and modular, with each function performing a specific task. Every thing has been defined in its own
@@ -73,6 +75,9 @@ for row in time_matrix:
 months = np.array(months)
 years = np.array(years)
 
+print("Dataset Loaded")
+print()
+
 ####                 DATASET LOADED                ####
 
 recommender = VelocityRecommender(data_matrix, time_matrix, months, years, items, 18, TCCF(), 1)   # In second last param, can also use MatrixFactorization()
@@ -82,51 +87,52 @@ recommender.cluster(2, P=25, pa=0.25, beta=1.5, bound=[0,5], plot=False, min=Tru
 
 recs = recommender.recommendItems(0, 15)
 
-print(recs)
+print("Recommendations: ")
+print()
 
 for index in recs:
     print(items.iloc[index][1])
 
 
 
-#####      FOR ACCURACY TESTING PURPOSES:
+#####      FOR ACCURACY TESTING PURPOSES, COMMENT ABOVE CODE AND UNCOMMENT CODE GIVEN BELOW:
 
-u_cols = ['user_id', 'age', 'sex', 'occupation', 'zip_code']
-users = pd.read_csv('ml-100k/u.user', sep='|', names=u_cols,encoding='latin-1')
+# u_cols = ['user_id', 'age', 'sex', 'occupation', 'zip_code']
+# users = pd.read_csv('ml-100k/u.user', sep='|', names=u_cols,encoding='latin-1')
 
-# reading ratings file:
-r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
-ratings = pd.read_csv('ml-100k/u1.base', sep='\t', names=r_cols,encoding='latin-1')
-ratings_test = pd.read_csv('ml-100k/u1.test', sep='\t', names=r_cols,encoding='latin-1')
+# # reading ratings file:
+# r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
+# ratings = pd.read_csv('ml-100k/u1.base', sep='\t', names=r_cols,encoding='latin-1')
+# ratings_test = pd.read_csv('ml-100k/u1.test', sep='\t', names=r_cols,encoding='latin-1')
 
-# reading items file:
-i_cols = ['movie id', 'movie title' ,'release date','video release date', 'IMDb URL', 'unknown', 'Action', 'Adventure',
-'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy',
-'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
-items = pd.read_csv('ml-100k/u.item', sep='|', names=i_cols,
-encoding='latin-1')
+# # reading items file:
+# i_cols = ['movie id', 'movie title' ,'release date','video release date', 'IMDb URL', 'unknown', 'Action', 'Adventure',
+# 'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy',
+# 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
+# items = pd.read_csv('ml-100k/u.item', sep='|', names=i_cols,
+# encoding='latin-1')
 
-n_users_train = 943
-n_items_train = 1682
-n_users_test = 943
-n_items_test = 1682
+# n_users_train = 943
+# n_items_train = 1682
+# n_users_test = 943
+# n_items_test = 1682
 
-data_matrix_train = np.zeros((n_users_train, n_items_train))
-data_matrix_test = np.zeros((n_users_test, n_items_test))
+# data_matrix_train = np.zeros((n_users_train, n_items_train))
+# data_matrix_test = np.zeros((n_users_test, n_items_test))
 
-for line in ratings.itertuples():
-    data_matrix_train[line[1]-1, line[2]-1] = line[3]
+# for line in ratings.itertuples():
+#     data_matrix_train[line[1]-1, line[2]-1] = line[3]
 
-for line in ratings_test.itertuples():
-    data_matrix_test[line[1]-1, line[2]-1] = line[3]
+# for line in ratings_test.itertuples():
+#     data_matrix_test[line[1]-1, line[2]-1] = line[3]
 
-time_matrix_train = np.zeros((n_users_train, n_items_train))
-time_matrix_test = np.zeros((n_users_test, n_items_test))
+# time_matrix_train = np.zeros((n_users_train, n_items_train))
+# time_matrix_test = np.zeros((n_users_test, n_items_test))
 
-for line in ratings.itertuples():
-    time_matrix_train[line[1]-1, line[2]-1] = line[4]
+# for line in ratings.itertuples():
+#     time_matrix_train[line[1]-1, line[2]-1] = line[4]
 
-for line in ratings_test.itertuples():
-    time_matrix_test[line[1]-1, line[2]-1] = line[4]
+# for line in ratings_test.itertuples():
+#     time_matrix_test[line[1]-1, line[2]-1] = line[4]
 
-TestDriver(data_matrix_train, data_matrix_test, time_matrix_train, 0, time_matrix_test)
+# TestDriver(data_matrix_train, data_matrix_test, time_matrix_train, 0, time_matrix_test)

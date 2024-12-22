@@ -12,7 +12,7 @@ class MatrixFactorization:
     self.alpha = alpha
     self.beta = beta
 
-  def run(self, R, user_index, K=100, steps=25000, alpha=0.002, beta=0.02):
+  def run(self, R, dummy, user_index, K=50, steps=25000, alpha=0.002, beta=0.02):
     R = numpy.array(R)
     self.original_ratings = R[user_index].copy()
 
@@ -72,7 +72,7 @@ class MatrixFactorization:
           optimizer.step()
 
           if step % 100 == 0:
-              sys.stdout.write("\rStep {}, Loss: {:.4f}".format(step, loss.item()))
+              sys.stdout.write("\r (Matrix Factorization) Step {}, Loss: {:.4f}".format(step, loss.item()))
               sys.stdout.flush()
 
       print()

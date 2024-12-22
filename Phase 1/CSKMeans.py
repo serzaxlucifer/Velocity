@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from math import gamma
 import numpy as np
 import torch
+import sys
 
 
 class CSKMeans:
@@ -53,6 +54,10 @@ class CSKMeans:
         best: GLOBAL BEST POSITION OF SHAPE (n,1)
 
         '''
+
+        print("Beginning Centroid Initialization Process")
+        print()
+        
         self.data_matrix = data_matrix.copy()      # add for our purpose
         self.time_matrix = time_matrix
         self.P = P
@@ -69,12 +74,16 @@ class CSKMeans:
         self.X = self.initialize_centroids()
 
         if optimizer == "CuckooSearch":
+          print("Optimizer Chosen: Cuckoo Search")
           self.best = self.CuckooSearch()
         elif optimizer == "Gradient":
+          print("Optimizer Chosen: Gradient Descent")
           self.best = self.GradientOptimizer(lr, tolerance)
         else:
           print("OPTIMIZER ", optimizer, " not found! Skipping Optimization Process.")
           self.best = self.X[0]
+          print("Randomly Initializing Centroids.")
+        print()
 
         # Now, run the K-means functions
 
@@ -226,8 +235,10 @@ class CSKMeans:
             self.fitness_time.append(self.fitness(self.best))
             self.time.append(t)
             if self.verbose:
-                print('Iteration:  ',t,'| best global fitness (cost):',round(self.fitness(self.best),7))
+                sys.stdout.write("\r (Cuckoo Search) Iteration:   {}, Best Global Fitness (cost): {:.4f}".format(t, round(self.fitness(self.best),7)))
 
+        print()
+        
         print('\nOPTIMUM SOLUTION\n  >', np.round(self.best.reshape(-1),7))
         print('\nOPTIMUM FITNESS\n  >', np.round(self.fitness(self.best),7))
 
@@ -235,6 +246,9 @@ class CSKMeans:
 
         if self.plot:
             self.Fplot()
+
+        print("Cuckoo Search Centroid Optimization Finished")
+        print()
 
         return self.best
 
@@ -256,6 +270,8 @@ class CSKMeans:
 
     def fit(self):
         self.centroids = self.best
+        print("K-Means Clustering Started.")
+        print()
 
         # Assign data points to clusters
         for _ in range(self.max_iters):

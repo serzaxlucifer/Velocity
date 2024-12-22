@@ -1,8 +1,7 @@
 import numpy as np
 import torch
-from TCCF import TCCF
+from TCCF import TCCF, WithoutTCCF
 from MF import MatrixFactorization
-from WithoutTCCF import WithoutTCCF
 from SimilarityMetrics import Pearson, Cosine
 import math
 import sys
@@ -11,7 +10,7 @@ class TestDriver:
   def __init__(self, data_matrix_train, data_matrix_test, time_matrix_train, user_index, time_matrix_test):
       collaborativeFilter = TCCF(Pearson(1))
       collaborativeFilterWTCC = WithoutTCCF(Cosine(1))
-      predictedSet = collaborativeFilter.run(data_matrix_train.copy(), time_matrix_train.copy(), user_index, time_matrix_test.copy(), data_matrix_test)
+      predictedSet = collaborativeFilter.run_test(data_matrix_train.copy(), time_matrix_train.copy(), user_index, time_matrix_test.copy(), data_matrix_test)
       p2set = collaborativeFilterWTCC.run(data_matrix_train.copy(), time_matrix_train.copy(), user_index, data_matrix_test)
       predictedSet = collaborativeFilter.results
 

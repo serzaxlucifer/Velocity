@@ -60,6 +60,7 @@ class VelocityRecommender:
     self.userID = []
 
     print("Engine Initialized!")
+    print()
 
   def setStartThreshold(self, num):
     inp = 'y'
@@ -76,6 +77,8 @@ class VelocityRecommender:
   # Invoke this periodically.
   def cluster(self, num_c, P=25, pa=0.25, beta=1.5, bound=None, plot=False, min=True, verbose=False, Tmax=300, max_iters=100, lr=0.02, tolerance=100, optimizer="CuckooSearch"):
 
+    print("OPERATION: Cluster         (Beginning) K-Means Clustering")
+    print()
     self.clusters = num_c
     self.optimizer = optimizer
     cluster_data = CSKMeans(self.data_matrix, self.time_matrix, P, self.clusters, pa, beta, bound, plot, min, verbose, Tmax, max_iters, optimizer, lr, tolerance)
@@ -84,20 +87,21 @@ class VelocityRecommender:
     self.clusterLabels = cluster_data.labels
     self.userID = cluster_data.user_ids
     self.clusterTimes = cluster_data.timeClusters
+    print("Clustering Operation Finished.")
+    print()
 
   def collaborativeFiltering(self, nonCluster=True, items=10):
     # Strategy Design Pattern used here to dynamically switch between MF (Matrix Factorization) and TCCF.
 
     if nonCluster == True:
       self.predictions = CollaborativeFiltering(self.strategy, self.data_matrix, self.time_matrix, self.user_index).results
-      print(self.predictions)
 
     else:
       self.predictions = CollaborativeFiltering(self.strategy, self.clusterMatrices[self.clusterLabels[self.user_index]], self.clusterTimes[self.clusterLabels[self.user_index]], self.userID[self.user_index]).results
-      print(self.predictions)
 
     self.top_indices = np.argsort(self.predictions)[(-1*int(items)):]      # Indices of top-N items
     print("TOP RATINGS: ", self.predictions[self.top_indices])
+    print()
     self.predicted_ratings = self.predictions[self.top_indices]   # Predicted ratings of top-N items
 
 
@@ -148,21 +152,26 @@ class VelocityRecommender:
     self.final_recommendations = []
 
     if ratings > self.coldStartThreshold:   # Pattern 1
-      print("Starting collaborative filtering!")
+      print("Starting Collaborative Filtering!")
+      print()
+        
       if self.clusters < 2:
         self.collaborativeFiltering(True, items/2)
       else:
         self.collaborativeFiltering(False, items/2)
 
-      print("collaborative filtering ended")
+      print("Collaborative Filtering Ended")
+        
       print(self.top_indices)
       for i in range(len(self.top_indices)):
           self.final_recommendations.append(self.top_indices[i])
 
       # Now self.top_indices, self.predicted_ratings contain the CF outputs.
-      print("computing entropy")
+      print("Computing Entropy")
+      print()
       self.computeTimeEntropy()
-      print("entropy computed")
+      print("Entropy Computed")
+      print()
       print(self.H)
 
       # Formulate Tag/Genre Table (Diversified Recommendations!)

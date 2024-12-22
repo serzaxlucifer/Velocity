@@ -10,6 +10,8 @@ class TCCF:       # Memory based Collaborative Filtering
 
     def __init__(self, similarity_metric=Pearson(1)):
         self.sim_metric = similarity_metric
+        print("Similarity Metric Chosen:", self.sim_metric)
+        print()
 
     def run(self, data_matrix, time_matrix, user_index):
         self.user_index = user_index
@@ -23,10 +25,46 @@ class TCCF:       # Memory based Collaborative Filtering
         print("Collaborative Filtering Engine Initialized.")
 
         self.user_sim_matrix = self.sim_metric.run(self.data_matrix_tensor, self.time_matrix_tensor, self.max_time_per_user, self.user_index)
-        print("Similarity Computed!")
 
         for movie_index in range(self.data_matrix_tensor.shape[1]):
             if self.data_matrix_tensor[user_index][movie_index] == 0:
+
+                predicted_rating = self.predict_missing_rating(movie_index)
+                prediction_of_user[movie_index] = predicted_rating
+
+        print("Collaborative Filtering Complete!")
+        self.results = prediction_of_user.numpy()
+
+        return prediction_of_user.numpy()
+
+    def run_test(self, data_matrix, time_matrix, user_index, time_matrix_test, data_matrix_test):
+        self.user_index = user_index
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.data_matrix_tensor = torch.tensor(data_matrix, dtype=torch.float32, device=device)
+        self.time_matrix_tensor = torch.tensor(time_matrix, dtype=torch.float32, device=device)
+        self.max_time_per_user, _ = torch.max(self.time_matrix_tensor, dim=1, keepdim=True)
+
+        prediction_of_user = torch.zeros(self.data_matrix_tensor.shape[1])
+        print("Collaborative Filtering Engine Initialized.")
+
+        # Now, look we will compute this somewhere else! (Moving Similarity Computation)
+        similarity_computed = False
+        self.user_precompute = 0
+
+        for movie_index in range(self.data_matrix_tensor.shape[1]):
+            if self.data_matrix_tensor[user_index][movie_index] == 0 and data_matrix_test[user_index][movie_index] != 0:
+
+                # Compute prediction for missing rating (Avoid re-computing similarities wherever possible.)
+                if similarity_computed == True and time_matrix_test[user_index][movie_index] == 0:
+                    self.user_sim_matrix = self.user_precompute.clone()
+                elif similarity_computed == False and time_matrix_test[user_index][movie_index] == 0:
+                    self.user_sim_matrix = Pearson(1).run_test(self.data_matrix_tensor, self.time_matrix_tensor, self.max_time_per_user, self.user_index, movie_index, time_matrix_test)
+                    self.user_precompute = self.user_sim_matrix.clone()
+                    similarity_computed = True
+                else:
+                    self.user_sim_matrix = Pearson(1).run_test(self.data_matrix_tensor, self.time_matrix_tensor, self.max_time_per_user, self.user_index, movie_index, time_matrix_test)
+
 
                 predicted_rating = self.predict_missing_rating(movie_index)
                 prediction_of_user[movie_index] = predicted_rating
