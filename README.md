@@ -6,6 +6,8 @@ Phase 1 contains implementation of Matrix Factorization and Paper: Personalized 
 
 Phase 2 contains implementation of paper: A Novel Deep Learning-Based Collaborative Filtering Model for Recommendation System [DOI:10.1109/TCYB.2018.2795041]
 
+An implementation related to Phase 3 with Off-Policy Bias Correction (Off-policy Learning in Two-stage Recommender Systems, [DOI:10.1145/3366423.3380130]) is available at [https://github.com/jiaqima/Off-Policy-2-Stage](https://github.com/jiaqima/Off-Policy-2-Stage).
+
 More coming soon!
 
 We recommend using a docker container to run these codes. Our exact configuration is given in the dockerfile provided. To make sure all Python Libraries are compatible, we recommend using the official NVIDIA Pytorch Image (nvcr.io/nvidia/pytorch:24.12-py3) to build the container. After that, all the codes should run it. However, you will need to match the comptabile NVIDIA Driver version and CUDA version on your system.
