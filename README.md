@@ -1,12 +1,10 @@
 # Velocity Movie Recommender Library
 
-This repository contains code of our implementation of different recommendation strategies, and papers. 
+This repository contains code of our modifications of implementation of different recommendation strategies, and papers. 
 
-Phase 1 contains implementation of Matrix Factorization and Paper: Personalized Recommendation System Based on Collaborative Filtering for IoT Scenarios [DOI:10.1109/TSC.2020.2964552]
+Phase 1 contains implementation of Matrix Factorization and Paper: Personalized Recommendation System Based on Collaborative Filtering for IoT Scenarios [DOI:10.1109/TSC.2020.2964552] and their comparison.
 
 Phase 2 contains implementation of paper: A Novel Deep Learning-Based Collaborative Filtering Model for Recommendation System [DOI:10.1109/TCYB.2018.2795041]
-
-An implementation related to Phase 3 with Off-Policy Bias Correction (Off-policy Learning in Two-stage Recommender Systems, [DOI:10.1145/3366423.3380130]) is available at [https://github.com/jiaqima/Off-Policy-2-Stage](https://github.com/jiaqima/Off-Policy-2-Stage).
 
 More coming soon!
 
